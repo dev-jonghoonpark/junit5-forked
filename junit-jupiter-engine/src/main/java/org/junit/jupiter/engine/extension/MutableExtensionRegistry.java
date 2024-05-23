@@ -15,6 +15,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
+import org.junit.jupiter.api.extension.AutoDetectedExtensionInvocationHandler;
 import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.engine.config.JupiterConfiguration;
 import org.junit.platform.commons.logging.Logger;
@@ -172,7 +174,8 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 	}
 
 	private void registerAutoDetectedExtension(Extension extension) {
-		registerExtension("auto-detected", extension);
+		registerExtension("auto-detected", (Extension) Proxy.newProxyInstance(extension.getClass().getClassLoader(),
+			extension.getClass().getInterfaces(), new AutoDetectedExtensionInvocationHandler(extension)));
 	}
 
 	private void registerLocalExtension(Extension extension) {
