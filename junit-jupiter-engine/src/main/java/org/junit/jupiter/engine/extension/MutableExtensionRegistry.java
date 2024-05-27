@@ -172,7 +172,7 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 	}
 
 	private void registerAutoDetectedExtension(Extension extension) {
-		registerExtension("auto-detected", extension);
+		registerExtension("auto-detected", new AutoDetectedExtension(extension));
 	}
 
 	private void registerLocalExtension(Extension extension) {
